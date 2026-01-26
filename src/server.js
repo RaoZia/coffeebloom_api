@@ -18,7 +18,18 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerFile, {
+    customCssUrl:
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
+    customJs: [
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js",
+    ],
+  }),
+);
 app.get("/api-docs", (req, res) => {
   // You need to have an index.html file in your public directory
   res.sendFile(path.join(__dirname, "public", "swagger-index.html"));
