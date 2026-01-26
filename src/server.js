@@ -1,0 +1,28 @@
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./config/swagger_output.json");
+const { success, error } = require("./constants/messages");
+const response = require("./constants/responses");
+const authRoutes = require("./routes/authRoutes");
+const usersRoutes = require("./routes/usersRoutes");
+const app = express();
+app.use(
+  cors({
+    origin: "*",
+    credentials: "false",
+  }),
+);
+app.use(express.json());
+
+app.use("/auth", authRoutes);
+app.use("/users", usersRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use((req, res) => {
+  return res.status(404).json(response.errorRes(error.PAGE_NOT_FOUND));
+});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}   `);
+});
