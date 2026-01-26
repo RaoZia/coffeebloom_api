@@ -183,7 +183,57 @@
         }
       }
     },
-    "/users/users": {
+    "/users/profile/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get sigle user",
+        "description": "Fetch single user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User fetched successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "rescode": 1,
+                  "message": "Users fetched successfully",
+                  "data": [
+                    {
+                      "user_id": 1,
+                      "name": "Name1",
+                      "email": "test@example.com",
+                      "address": "Your Address"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/": {
       "get": {
         "tags": [
           "users"
@@ -227,6 +277,82 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get sigle user",
+        "description": "Fetch single user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password",
+                  "confirm_password",
+                  "address"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Ali Khan"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@test.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "123456"
+                  },
+                  "confirm_password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "123456"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "Lahore"
+                  }
+                }
+              }
+            }
           }
         }
       }

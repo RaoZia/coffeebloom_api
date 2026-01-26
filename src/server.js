@@ -30,10 +30,6 @@ app.use(
     ],
   }),
 );
-app.get("/api-docs", (req, res) => {
-  // You need to have an index.html file in your public directory
-  res.sendFile(path.join(__dirname, "public", "swagger-index.html"));
-});
 
 app.use((req, res) => {
   return res.status(404).json(response.errorRes(error.PAGE_NOT_FOUND));

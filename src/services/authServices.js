@@ -23,7 +23,6 @@ const signup = async ({ name, email, password, confirm_password, address }) => {
   if (password !== confirm_password) {
     throw new Error(error.PASSWORD_MISMATCH);
   }
-  console.log("is working..");
 
   // ########################### Convert passwerd into hashed password ##############################
   const hashedPassword = await bcrypt.hash(password, 10);

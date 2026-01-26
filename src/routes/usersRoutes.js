@@ -1,10 +1,43 @@
 const express = require("express");
 const router = express.Router();
 const protected = require("../middlewares/authMiddleware");
-const { getAllUsers } = require("../controllers/usersController");
+const {
+  getSingleuser,
+  getAllUsers,
+  updateById,
+} = require("../controllers/usersController");
 
 router.get(
-  "/users",
+  "/profile/:id",
+  protected,
+  /*
+    #swagger.tags = ['users']
+    #swagger.summary = 'Get sigle user'
+    #swagger.description = 'Fetch single user'
+    #swagger.responses[200] = {
+      description: 'User fetched successfully',
+      content: {
+        "application/json": {
+          example: {
+            rescode: 1,
+            message: "Users fetched successfully",
+            data: [
+              {
+                user_id: 1,
+                name: "Name1",
+                email: "test@example.com",
+                address: "Your Address"
+              }
+            ]
+          }
+        }
+      }
+    }
+  */
+  getSingleuser,
+);
+router.get(
+  "/",
   protected,
   /*
     #swagger.tags = ['users']
@@ -40,4 +73,52 @@ router.get(
   getAllUsers,
 );
 
+router.put(
+  "/:id",
+  protected,
+  /*
+    #swagger.tags = ['users']
+    #swagger.summary = 'Get sigle user'
+    #swagger.description = 'Fetch single user'
+    #swagger.responses[200] = {
+      description: 'User fetched successfully',
+      #swagger.requestBody = {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: [ "name","email", "password","confirm_password", "address"],
+            properties: {
+              name: { type: "string", example: "Ali Khan" },
+              email: { type: "string", format: "email", example: "user@test.com" },
+              password: { type: "string", format: "password", example: "123456" },
+              confirm_password: { type: "string", format: "password", example: "123456" },
+              address: { type: "string", example: "Lahore" }
+            }
+          }
+        }
+      }
+    }
+
+    #swagger.responses[201] = {
+      description: 'User updated successfully',
+      content: {
+        "application/json": {
+          example: {
+            rescode: 1,
+            message: "User updated",
+            data: {
+              id: 1,
+              name: "Name",
+              email: "test@gmail.com",
+              address: "Address",
+            }
+          }
+        }
+      }
+    }
+  */
+  updateById,
+);
 module.exports = router;
