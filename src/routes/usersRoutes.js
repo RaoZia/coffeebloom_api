@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const protected = require("../middlewares/authMiddleware");
+const upload = require("../middlewares/upload");
 const {
   getSingleuser,
   getAllUsers,
@@ -76,6 +77,7 @@ router.get(
 router.put(
   "/:id",
   protected,
+  upload.single("image"),
   /*
     #swagger.tags = ['users']
     #swagger.summary = 'Get sigle user'
@@ -85,7 +87,7 @@ router.put(
       #swagger.requestBody = {
       required: true,
       content: {
-        "application/json": {
+        "multipart/form-data": {
           schema: {
             type: "object",
             required: [ "name","email", "password","confirm_password", "address"],
@@ -93,8 +95,8 @@ router.put(
               name: { type: "string", example: "Ali Khan" },
               email: { type: "string", format: "email", example: "user@test.com" },
               password: { type: "string", format: "password", example: "123456" },
-              confirm_password: { type: "string", format: "password", example: "123456" },
-              address: { type: "string", example: "Lahore" }
+              address: { type: "string", example: "Lahore" },
+              image: {type: "string", format: "binary"}
             }
           }
         }
@@ -113,6 +115,7 @@ router.put(
               name: "Name",
               email: "test@gmail.com",
               address: "Address",
+              image_url: "/uploads/images/profile.jpg"
             }
           }
         }

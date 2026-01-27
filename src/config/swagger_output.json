@@ -316,7 +316,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -341,14 +341,13 @@
                     "format": "password",
                     "example": "123456"
                   },
-                  "confirm_password": {
-                    "type": "string",
-                    "format": "password",
-                    "example": "123456"
-                  },
                   "address": {
                     "type": "string",
                     "example": "Lahore"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               }

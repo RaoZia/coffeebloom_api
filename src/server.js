@@ -1,13 +1,18 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./config/swagger_output.json");
 const { success, error } = require("./constants/messages");
 const response = require("./constants/responses");
 const authRoutes = require("./routes/authRoutes");
 const usersRoutes = require("./routes/usersRoutes");
+const coffeeRoutes = require("./routes/coffeeRoutes");
 const app = express();
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use(
   cors({
     origin: "*",
@@ -18,6 +23,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
+app.use("/coffees", coffeeRoutes);
 app.use(
   "/api-docs",
   swaggerUi.serve,

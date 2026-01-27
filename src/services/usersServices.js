@@ -3,6 +3,13 @@ const TABLE_NAMES = require("../constants/tableNames");
 const { error, success } = require("../constants/messages");
 // ########################### Function to getAllUsers ##############################
 const getSingleuser = async (id) => {
+  const [existingUser] = await db.execute(
+    `SELECT id FROM ${TABLE_NAMES.USERS} WHERE id = ? AND status = 1`,
+    [id],
+  );
+  if (existingUser.length === 0) {
+    throw new Error(error.USER_NOT_FOUND);
+  }
   const [result] = await db.execute(
     `SELECT 
       u.id,
@@ -19,6 +26,7 @@ const getSingleuser = async (id) => {
 
   return result;
 };
+// ########################### Function to getAllUsers ##############################
 const getAllUsers = async () => {
   const [rows] = await db.execute(
     `SELECT 
@@ -35,34 +43,49 @@ const getAllUsers = async () => {
 
   return rows;
 };
-
-const updateById = async (id, { email, name, address }) => {
-  // const [existingUser] = await db.execute(
-  //   `SELECT * FROM ${TABLE_NAMES.USERS} WHERE email=?  AND status = 1`,
-  //   [email],
-  // );
-  // // ########################### Check Existing Email ##############################
-  // if (existingUser.length > 0) {
-  //   throw new Error(error.EMAIL_EXIST);
-  // }
+// ########################### Function to updateUser ##############################
+const updateById = async (id, { email, name, address }, imagePath) => {
+  // ########################### check for isUser or not ##############################
+  const [existingUser] = await db.execute(
+    `SELECT id FROM ${TABLE_NAMES.USERS} WHERE id = ? AND status = 1`,
+    [id],
+  );
+  if (existingUser.length === 0) {
+    throw new Error(error.USER_NOT_FOUND);
+  }
+  // ########################### Query to update tbl_users ##############################
   await db.execute(
     `UPDATE ${TABLE_NAMES.USERS} SET email = ?  WHERE id=? AND status = 1 `,
     [email, id],
   );
+  // ########################### Query to update tbl_users_details ##############################
   await db.execute(
     `UPDATE ${TABLE_NAMES.USERS_DETAILS} SET name = ? , address = ? WHERE user_id=? AND status = 1 `,
     [name, address, id],
   );
-
+  // ########################### Query to insert image in tbl_imgs ##############################
+  const [storeImg] = await db.execute(
+    `INSERT INTO ${TABLE_NAMES.IMAGES} (image_url) VALUES (?)`,
+    [imagePath],
+  );
+  const ImgId = storeImg.insertId;
+  // ########################### Query to update tbl_users_details ##############################
+  await db.execute(
+    `UPDATE ${TABLE_NAMES.USERS_DETAILS} SET image_id = ? WHERE user_id = ?`,
+    [ImgId, id],
+  );
+  // ########################### Query to return updated record ##############################
   const [result] = await db.execute(
     `SELECT
         u.id,
         u.email,
         ud.name,
-        ud.address
+        ud.address,
+        i.image_url
       FROM ${TABLE_NAMES.USERS} u
       LEFT JOIN ${TABLE_NAMES.USERS_DETAILS} ud
         ON u.id = ud.user_id
+      LEFT JOIN ${TABLE_NAMES.IMAGES} i ON ud.image_id = i.image_id
       WHERE u.id = ? AND u.status = 1
       `,
     [id],

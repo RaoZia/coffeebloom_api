@@ -25,16 +25,16 @@ const getAllUsers = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  // const id = req.params.id;
-  // console.log("Updation user id is:", id);
   try {
     const id = req.params.id;
-    const user = await usersServices.updateById(id, req.body);
+    const imagePath = req.file ? `uploads/images/${req.file.filename}` : null;
+
+    const user = await usersServices.updateById(id, req.body, imagePath);
     return res
       .status(200)
       .json(response.successRes(200, success.USER_UPDATED, user));
   } catch (err) {
-    res.status(401).json(response.errorRes(401, error.INVALID_USER_ID));
+    res.status(401).json(response.errorRes(401, err));
   }
 };
 
