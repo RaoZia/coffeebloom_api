@@ -6,6 +6,8 @@ const success = {
   ALL_USERS: "All users fetched",
   SINGLE_USER: "User fetched successfully",
   USER_UPDATED: "User update successfully",
+  EMAIL_SENT: "Email sent successfully",
+  PASSWORD_CHANGE: "Password updated",
 };
 const error = {
   EMAIL_EXIST: "This Email is already registered",
@@ -21,6 +23,7 @@ const error = {
   REFRESH_TOKEN_MISSING: "Refresh token missing",
   INVALID_REFRESH_TOKEN: "Invalid Refresh Token",
   INVALID_USER_ID: "Invalid user ID",
+  INVALID_OTP: "Invalid Otp",
 };
 
 module.exports = { success, error };

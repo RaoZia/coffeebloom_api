@@ -4,6 +4,8 @@ const router = express.Router();
 const {
   signup,
   login,
+  forgotPassword,
+  resetPass,
   refreshToken,
 } = require("../controllers/authController");
 
@@ -136,4 +138,6 @@ router.post(
   refreshToken,
 );
 
+router.post("/forgotPass", forgotPassword);
+router.post("/resetPass", resetPass);
 module.exports = router;

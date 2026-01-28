@@ -5,6 +5,8 @@ const { success, error } = require("../constants/messages");
 const authService = require("../services/authServices");
 const response = require("../constants/responses");
 const jwtutils = require("../utils/token");
+const sendEmail = require("../config/sendEMail");
+const randomInt = require("node:crypto");
 
 // ########################### SignUp api ##############################
 const signup = async (req, res) => {
@@ -29,17 +31,33 @@ const login = async (req, res) => {
     res.status(401).json(response.errorRes(401, error.message));
   }
 };
+// ########################### Forgot password api ##############################
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await authService.forgotPassword({ email });
 
-// ########################### Get all users ##############################
-// const getAllUsers = async (req, res) => {
-//   try {
-//     const user = await authService.getAllUsers();
-//     res.status(200).json(response.successRes(200, success.ALL_USERS, user));
-//   } catch (error) {
-//     res.status(401).json(response.errorRes(401, error.message));
-//   }
-// };
-
+    const otp = Math.floor(100000 + Math.random() * 999999);
+    // const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+    // let otp = randomInt(1, 999999).toString().padStart(6, "0");
+    await authService.handleOtp({ email, otp });
+    const message = `Your otp is ${otp}`;
+    await sendEmail(email, "Reset Password", message);
+    res.status(200).json(response.successRes(200, success.EMAIL_SENT));
+  } catch (err) {
+    res.status(401).json(response.errorRes(401, err));
+  }
+};
+const resetPass = async (req, res) => {
+  try {
+    // console.log("is working");
+    const { email, otp, password } = req.body;
+    const user = await authService.resetPass(email, otp, password);
+    res.status(200).json(response.successRes(200, success.PASSWORD_CHANGE));
+  } catch (err) {
+    res.status(401).json(response.errorRes(401, err.message));
+  }
+};
 const refreshToken = async (req, res) => {
   try {
     const { refresh_token } = req.body;
@@ -63,6 +81,7 @@ const refreshToken = async (req, res) => {
 module.exports = {
   signup,
   login,
-  // getAllUsers,
+  forgotPassword,
+  resetPass,
   refreshToken,
 };

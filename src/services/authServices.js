@@ -75,17 +75,6 @@ const login = async ({ email, password }) => {
   }
 
   // ########################### Assign token on login ##############################
-  // const token = jwt.sign(
-  //   { id: user.id, email: user.email },
-  //   process.env.JWT_SECRET,
-  //   { expiresIn: "1h" },
-  // );
-  // const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_SECRET, {
-  //   expiresIn: "1h",
-  // });
-  // const refreshToken = jwt.sign({ id: user.id }, process.env.REFRESH_SECRET, {
-  //   expiresIn: "1h",
-  // });
 
   const accessToken = jwtutils.generateAccessToken(user.id);
   const refreshToken = jwtutils.generateRefreshToken(user.id);
@@ -96,25 +85,64 @@ const login = async ({ email, password }) => {
   };
 };
 
-// ########################### Function to getAllUsers ##############################
-// const getAllUsers = async () => {
-//   const [rows] = await db.execute(
-//     `SELECT
-//       u.id,
-//       u.email,
-//       ud.name,
-//       ud.address
-//     FROM ${TABLE_NAMES.USERS} u
-//     LEFT JOIN ${TABLE_NAMES.USERS_DETAILS} ud
-//       ON u.id = ud.user_id
-//     WHERE u.status = 1
-//     `,
-//   );
+const forgotPassword = async ({ email }) => {
+  const [result] = await db.execute(
+    `SELECT * FROM ${TABLE_NAMES.USERS} WHERE email = ? AND status = 1`,
+    [email],
+  );
+  if (result.length === 0) {
+    throw new Error(error.USER_NOT_FOUND);
+  }
+  return result;
+};
 
-//   return rows;
-// };
+const handleOtp = async ({ email, otp }) => {
+  const [exist] = await db.execute(
+    `SELECT * FROM ${TABLE_NAMES.PASSWORD_RESETS} WHERE email = ? AND status = 1`,
+    [email],
+  );
+  if (exist.length > 0) {
+    await db.execute(
+      `UPDATE ${TABLE_NAMES.PASSWORD_RESETS} SET otp = ? WHERE email = ? AND status=1`,
+      [otp, email],
+    );
+  } else {
+    await db.execute(
+      `INSERT INTO ${TABLE_NAMES.PASSWORD_RESETS} (email, otp) VALUES (?, ?)`,
+      [email, otp],
+    );
+  }
+};
+
+const verifyOtp = async ({ email, otp }) => {
+  const [result] = await db.execute(
+    `SELECT email FROM ${TABLE_NAMES.PASSWORD_RESETS} WHERE email = ?, otp = ? 
+    AND status = 1`,
+    [email, otp],
+  );
+  return result;
+};
+const resetPass = async (email, otp, password) => {
+  console.log("email is ", email, otp, password);
+  const [result] = await db.execute(
+    `SELECT email FROM ${TABLE_NAMES.PASSWORD_RESETS} WHERE email = ? AND otp = ? 
+    AND status = 1`,
+    [email, otp],
+  );
+  if (result.length === 0) {
+    throw new Error(error.INVALID_OTP);
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await db.execute(
+    `UPDATE ${TABLE_NAMES.USERS} SET password_hash = ? WHERE email = ? AND status =1`,
+    [hashedPassword, email],
+  );
+};
 module.exports = {
   signup,
   login,
-  // getAllUsers,
+  forgotPassword,
+  handleOtp,
+  verifyOtp,
+  resetPass,
 };
