@@ -138,6 +138,103 @@ router.post(
   refreshToken,
 );
 
-router.post("/forgotPass", forgotPassword);
-router.post("/resetPass", resetPass);
+router.post(
+  "/forgotPass",
+  /*
+    #swagger.tags = ['Auth']
+    #swagger.summary = 'Forgot Password'
+    #swagger.description = 'Send OTP to registered email for password reset'
+
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: ["email"],
+            properties: {
+              email: {
+                type: "string",
+                format: "email",
+                example: "user@test.com"
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #swagger.responses[200] = {
+      description: 'OTP sent to email successfully',
+      content: {
+        "application/json": {
+          example: {
+            rescode: 1,
+            message: "OTP sent to your email",
+            data: []
+          }
+        }
+      }
+    }
+
+    #swagger.responses[404] = {
+      description: 'User not found'
+    }
+  */
+  forgotPassword,
+);
+router.post(
+  "/resetPass",
+  /*
+    #swagger.tags = ['Auth']
+    #swagger.summary = 'Reset Password'
+    #swagger.description = 'Reset user password using valid OTP'
+
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: ["email", "otp", "password"],
+            properties: {
+              email: {
+                type: "string",
+                format: "email",
+                example: "user@test.com"
+              },
+              otp: {
+                type: "string",
+                example: "123456"
+              },
+              password: {
+                type: "string",
+                format: "password",
+                example: "12345"
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #swagger.responses[200] = {
+      description: 'Password reset successfully',
+      content: {
+        "application/json": {
+          example: {
+            rescode: 1,
+            message: "Password changed successfully",
+            data: []
+          }
+        }
+      }
+    }
+
+    #swagger.responses[400] = {
+      description: 'Invalid or expired OTP'
+    }
+  */
+  resetPass,
+);
 module.exports = router;

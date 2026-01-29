@@ -13,6 +13,7 @@
 //     `INSERT INTO ${TABLE_NAMES.USERS}  (user_name, user_email, password) VALUES (?, ?, ?)`,
 //     [name, email, password],
 //   );
+// DATE_ADD(NOW(), INTERVAL 1 MINUTE)
 //   return result.insertId;
 // };
 

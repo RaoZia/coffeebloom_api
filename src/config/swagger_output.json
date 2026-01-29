@@ -185,23 +185,45 @@
     },
     "/auth/forgotPass": {
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Forgot Password",
+        "description": "Send OTP to registered email for password reset",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OTP sent to email successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "rescode": 1,
+                  "message": "OTP sent to your email",
+                  "data": []
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "email"
+                ],
                 "properties": {
                   "email": {
-                    "example": "any"
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@test.com"
                   }
                 }
               }
@@ -212,29 +234,53 @@
     },
     "/auth/resetPass": {
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Reset Password",
+        "description": "Reset user password using valid OTP",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "rescode": 1,
+                  "message": "Password changed successfully",
+                  "data": []
+                }
+              }
+            }
           },
-          "401": {
-            "description": "Unauthorized"
+          "400": {
+            "description": "Invalid or expired OTP"
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "email",
+                  "otp",
+                  "password"
+                ],
                 "properties": {
                   "email": {
-                    "example": "any"
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@test.com"
                   },
                   "otp": {
-                    "example": "any"
+                    "type": "string",
+                    "example": "123456"
                   },
                   "password": {
-                    "example": "any"
+                    "type": "string",
+                    "format": "password",
+                    "example": "12345"
                   }
                 }
               }
@@ -422,6 +468,139 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/coffees/allcoffee": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/coffees/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/catagory/add": {
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/catagory/all": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/catagory/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"

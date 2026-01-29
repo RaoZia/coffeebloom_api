@@ -84,7 +84,7 @@ const login = async ({ email, password }) => {
     refreshToken,
   };
 };
-
+// ########################### Forgot Password ##############################
 const forgotPassword = async ({ email }) => {
   const [result] = await db.execute(
     `SELECT * FROM ${TABLE_NAMES.USERS} WHERE email = ? AND status = 1`,
@@ -95,38 +95,37 @@ const forgotPassword = async ({ email }) => {
   }
   return result;
 };
-
+// ########################### Handle Password ##############################
 const handleOtp = async ({ email, otp }) => {
+  // const expiresAt = new Date(Date.now() + 1 * 60 * 1000);
+  // const expiresAt = new Date();
+  // expiresAt.setMinutes(expiresAt.getMinutes() + 1);
   const [exist] = await db.execute(
     `SELECT * FROM ${TABLE_NAMES.PASSWORD_RESETS} WHERE email = ? AND status = 1`,
     [email],
   );
   if (exist.length > 0) {
     await db.execute(
-      `UPDATE ${TABLE_NAMES.PASSWORD_RESETS} SET otp = ? WHERE email = ? AND status=1`,
+      `UPDATE ${TABLE_NAMES.PASSWORD_RESETS} SET otp = ?, expires_at= DATE_ADD(NOW(), INTERVAL 1 MINUTE) WHERE email = ? AND status=1`,
       [otp, email],
     );
   } else {
     await db.execute(
-      `INSERT INTO ${TABLE_NAMES.PASSWORD_RESETS} (email, otp) VALUES (?, ?)`,
+      `INSERT INTO ${TABLE_NAMES.PASSWORD_RESETS} (email, otp, expires_at) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 1 MINUTE))`,
       [email, otp],
     );
   }
 };
-
-const verifyOtp = async ({ email, otp }) => {
-  const [result] = await db.execute(
-    `SELECT email FROM ${TABLE_NAMES.PASSWORD_RESETS} WHERE email = ?, otp = ? 
-    AND status = 1`,
-    [email, otp],
-  );
-  return result;
-};
+// ########################### Reset Password ##############################
 const resetPass = async (email, otp, password) => {
   console.log("email is ", email, otp, password);
   const [result] = await db.execute(
-    `SELECT email FROM ${TABLE_NAMES.PASSWORD_RESETS} WHERE email = ? AND otp = ? 
-    AND status = 1`,
+    `SELECT email 
+     FROM ${TABLE_NAMES.PASSWORD_RESETS} 
+     WHERE email = ? 
+       AND otp = ? 
+       AND status = 1
+       AND expires_at > NOW()`,
     [email, otp],
   );
   if (result.length === 0) {
@@ -143,6 +142,5 @@ module.exports = {
   login,
   forgotPassword,
   handleOtp,
-  verifyOtp,
   resetPass,
 };

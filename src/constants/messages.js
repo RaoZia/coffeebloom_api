@@ -8,12 +8,18 @@ const success = {
   USER_UPDATED: "User update successfully",
   EMAIL_SENT: "Email sent successfully",
   PASSWORD_CHANGE: "Password updated",
+  COFFEE_ADDED: "Coffee item added",
+  ALL_COFFEES: "All Coffees fetched",
+  COFFEE_CAT_ADDED: "Coffee catagory added",
+  ALL_COFFEE_CAT: "All Coffee catagoris",
+  DELETE_COFFEE: "Record Deleted",
 };
 const error = {
   EMAIL_EXIST: "This Email is already registered",
   INVALID_CREDENTIALS: "Invalid Credentials",
   INVALID_USERNAME: "Invalid Username or Password",
   USER_NOT_FOUND: "User Not Found",
+  RECORD_NOT_FOUND: "Record Not Found",
   PAGE_NOT_FOUND: "Page Not Found",
   INVALID_TOKEN: "Invalid Tokennn",
   PASSWORD_MISMATCH: "Password and Confirm Password do not match",

@@ -5,6 +5,11 @@ const TABLE_NAMES = {
   IMAGES: "tbl_imgs",
   COFFEES: "tbl_coffees",
   PASSWORD_RESETS: "tbl_password_resets",
+  COFFEES: "tbl_coffees",
+  COFFEE_CATAGORY: "tbl_coffee_catagory",
+  COFFEE_FLAVOR: "tbl_coffee_flavors",
+  COFFEE_SIZES: "tbl_coffee_sizes",
+  COFFEE_MILK_OPTIONS: "tbl_coffee_milk_option",
 };
 
 module.exports = TABLE_NAMES;

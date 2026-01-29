@@ -38,8 +38,6 @@ const forgotPassword = async (req, res) => {
     const user = await authService.forgotPassword({ email });
 
     const otp = Math.floor(100000 + Math.random() * 999999);
-    // const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
-    // let otp = randomInt(1, 999999).toString().padStart(6, "0");
     await authService.handleOtp({ email, otp });
     const message = `Your otp is ${otp}`;
     await sendEmail(email, "Reset Password", message);
@@ -48,16 +46,18 @@ const forgotPassword = async (req, res) => {
     res.status(401).json(response.errorRes(401, err));
   }
 };
+// ########################### Reset Password ##############################
 const resetPass = async (req, res) => {
   try {
-    // console.log("is working");
     const { email, otp, password } = req.body;
     const user = await authService.resetPass(email, otp, password);
     res.status(200).json(response.successRes(200, success.PASSWORD_CHANGE));
   } catch (err) {
-    res.status(401).json(response.errorRes(401, err.message));
+    res.status(400).json(response.errorRes(400, err.message));
   }
 };
+
+// ########################### Refresh token generate ##############################
 const refreshToken = async (req, res) => {
   try {
     const { refresh_token } = req.body;
