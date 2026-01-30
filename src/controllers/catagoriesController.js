@@ -31,7 +31,19 @@ const getCatById = async (req, res) => {
     res.status(401).json(response.errorRes(401, err.message));
   }
 };
-
+// ########################### Update by coffeeById ##############################
+const updateCatById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    const result = await catagoryServices.updateCatById(id, data);
+    return res
+      .status(200)
+      .json(response.successRes(200, success.ALL_COFFEES, result));
+  } catch (err) {
+    res.status(401).json(response.errorRes(401, err.message));
+  }
+};
 // ########################### Get coffeeById ##############################
 const DeleteCatById = async (req, res) => {
   try {
@@ -55,5 +67,6 @@ module.exports = {
   addCategory,
   getAllCategories,
   getCatById,
+  updateCatById,
   DeleteCatById,
 };

@@ -462,25 +462,25 @@
         }
       }
     },
-    "/coffees/add": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/coffees/allcoffee": {
+    "/coffees/all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Coffees"
+        ],
+        "summary": "Get all coffees",
+        "description": "Fetch all active coffees",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Coffees fetched successfully"
           },
           "401": {
             "description": "Unauthorized"
@@ -490,7 +490,11 @@
     },
     "/coffees/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Coffees"
+        ],
+        "summary": "Get coffee By ID",
+        "description": "Get coffee details",
         "parameters": [
           {
             "name": "id",
@@ -499,24 +503,10 @@
             "schema": {
               "type": "string"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "authorization",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -524,46 +514,50 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
+            "description": "Coffee Fetched successfully"
           },
           "401": {
             "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/catagory/add": {
-      "post": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
           }
         }
       }
     },
     "/catagory/all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Coffee Categories"
+        ],
+        "summary": "Get all coffee categories",
+        "description": "Fetch all active coffee categories",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Categories fetched successfully"
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
     },
     "/catagory/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Coffee Categories"
+        ],
+        "summary": "Get coffee By ID",
+        "description": "Get coffee details",
         "parameters": [
           {
             "name": "id",
@@ -572,24 +566,36 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Coffee Fetched successfully"
           },
           "401": {
             "description": "Unauthorized"
           }
         }
-      },
-      "delete": {
-        "description": "",
+      }
+    },
+    "/sizes/all": {
+      "get": {
+        "tags": [
+          "Coffee Sizes"
+        ],
+        "summary": "Get all coffees sizes",
+        "description": "Fetch all active coffee sizes",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "authorization",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -597,10 +603,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
+            "description": "Coffee sizes fetched successfully"
           },
           "401": {
             "description": "Unauthorized"

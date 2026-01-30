@@ -4,13 +4,20 @@ const { error, success } = require("../constants/messages");
 // ########################### Add catagories ##############################
 const addCategory = async (data) => {
   const { coffee_catagory_name } = data;
+
   const [result] = await db.execute(
     `INSERT INTO ${TABLE_NAMES.COFFEE_CATAGORY}
      (coffee_catagory_name)
      VALUES (?)`,
     [coffee_catagory_name],
   );
-
+  // const catId = result.insertId;
+  // await db.execute(
+  //   `INSERT INTO ${TABLE_NAMES.COFFEES}
+  //    (coffee_catagory_id)
+  //    VALUES (?)`,
+  //   [catId],
+  // );
   return { id: result.insertId, coffee_catagory_name };
 };
 // ########################### Get All catagories ##############################
@@ -36,6 +43,26 @@ const getCatById = async (id) => {
   );
   return result;
 };
+// ########################### Update CatagoryById ##############################
+const updateCatById = async (id, data) => {
+  const { coffee_catagory_name } = data;
+  const [existingUser] = await db.execute(
+    `SELECT coffee_catagory_id FROM ${TABLE_NAMES.COFFEE_CATAGORY} WHERE coffee_catagory_id = ? AND status = 1`,
+    [id],
+  );
+  if (existingUser.length === 0) {
+    throw new Error(error.RECORD_NOT_FOUND);
+  }
+  await db.execute(
+    `UPDATE ${TABLE_NAMES.COFFEE_CATAGORY} SET coffee_catagory_name =? WHERE  coffee_catagory_id=? AND status = 1`,
+    [coffee_catagory_name, id],
+  );
+  const [result] = await db.execute(
+    `SELECT * FROM ${TABLE_NAMES.COFFEE_CATAGORY} WHERE coffee_catagory_id =? AND status = 1`,
+    [id],
+  );
+  return result;
+};
 // ########################### Delete catagoryById ##############################
 const DeleteCatById = async (id) => {
   const [existingUser] = await db.execute(
@@ -52,4 +79,10 @@ const DeleteCatById = async (id) => {
   return result;
 };
 
-module.exports = { addCategory, getAllCategories, getCatById, DeleteCatById };
+module.exports = {
+  addCategory,
+  getAllCategories,
+  getCatById,
+  updateCatById,
+  DeleteCatById,
+};

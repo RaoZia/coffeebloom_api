@@ -36,18 +36,18 @@ const getCoffeeById = async (req, res) => {
     res.status(401).json(response.errorRes(401, err.message));
   }
 };
-// ########################### Get coffeeById ##############################
+// ########################### Update coffeeById ##############################
 const updateCoffeeById = async (req, res) => {
   try {
     const id = req.params.id;
     const data = req.body;
     const result = await coffeeServices.updateCoffeeById(id, data);
-    // console.log(result);
+    console.log("result is", result);
     return res
       .status(200)
       .json(response.successRes(200, success.ALL_COFFEES, result));
   } catch (err) {
-    res.status(401).json(response.errorRes(401, err.message));
+    return res.status(401).json(response.errorRes(401, err.message));
   }
 };
 // ########################### Get coffeeById ##############################
