@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const upload = require("../middlewares/upload");
 const {
   addCoffee,
   getAllCoffees,
@@ -9,9 +9,9 @@ const {
   DeleteCoffeeById,
 } = require("../controllers/coffeesController");
 const protected = require("../middlewares/authMiddleware");
-// router.post("/add", addCoffee);
+// router.post("/add", upload.single("image"), addCoffee);
 router.get(
-  "/all",
+  "/",
   protected,
   /*
     #swagger.tags = ['Coffees']

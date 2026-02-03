@@ -25,4 +25,15 @@ const getAllSizes = async (req, res) => {
   }
 };
 
-module.exports = { addCoffeeSize, getAllSizes };
+const getSizeByID = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await coffeeSizeServices.getSizeByID(id);
+    return res
+      .status(200)
+      .json(response.successRes(200, success.COFFEE_ADDED, result));
+  } catch (err) {
+    res.status(401).json(response.errorRes(401, err));
+  }
+};
+module.exports = { addCoffeeSize, getAllSizes, getSizeByID };

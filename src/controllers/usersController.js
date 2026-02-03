@@ -20,7 +20,7 @@ const getAllUsers = async (req, res) => {
     const user = await usersServices.getAllUsers();
     res.status(200).json(response.successRes(200, success.ALL_USERS, user));
   } catch (err) {
-    res.status(401).json(response.errorRes(401, error.message));
+    res.status(401).json(response.errorRes(401, err.message));
   }
 };
 

@@ -13,6 +13,7 @@ const success = {
   COFFEE_CAT_ADDED: "Coffee catagory added",
   ALL_COFFEE_CAT: "All Coffee catagoris",
   DELETE_COFFEE: "Record Deleted",
+  OTP_VERIFIED: "Otp verify successfully",
 };
 const error = {
   EMAIL_EXIST: "This Email is already registered",

@@ -80,30 +80,46 @@ router.put(
   upload.single("image"),
   /*
     #swagger.tags = ['users']
-    #swagger.summary = 'Get sigle user'
-    #swagger.description = 'Fetch single user'
-    #swagger.responses[200] = {
-      description: 'User fetched successfully',
-      #swagger.requestBody = {
+    #swagger.summary = 'Update user'
+    #swagger.description = 'Update user profile with image'
+
+    #swagger.security = [{
+      "BearerAuth": []
+    }]
+
+    #swagger.consumes = ['multipart/form-data']
+
+    #swagger.requestBody = {
       required: true,
       content: {
         "multipart/form-data": {
           schema: {
             type: "object",
-            required: [ "name","email", "password","confirm_password", "address"],
+            required: ["name", "email", "address"],
             properties: {
-              name: { type: "string", example: "Ali Khan" },
-              email: { type: "string", format: "email", example: "user@test.com" },
-              password: { type: "string", format: "password", example: "123456" },
-              address: { type: "string", example: "Lahore" },
-              image: {type: "string", format: "binary"}
+              name: {
+                type: "string",
+                example: "Ali Khan"
+              },
+              email: {
+                type: "string",
+                example: "user@test.com"
+              },
+              address: {
+                type: "string",
+                example: "Lahore"
+              },
+              image: {
+                type: "string",
+                format: "binary"
+              }
             }
           }
         }
       }
     }
 
-    #swagger.responses[201] = {
+    #swagger.responses[200] = {
       description: 'User updated successfully',
       content: {
         "application/json": {
@@ -112,9 +128,9 @@ router.put(
             message: "User updated",
             data: {
               id: 1,
-              name: "Name",
-              email: "test@gmail.com",
-              address: "Address",
+              name: "Ali Khan",
+              email: "user@test.com",
+              address: "Lahore",
               image_url: "/uploads/images/profile.jpg"
             }
           }

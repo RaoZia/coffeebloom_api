@@ -4,7 +4,9 @@ const catagoryServices = require("../services/catagoriesServices");
 // ########################### Add catagory ##############################
 const addCategory = async (req, res) => {
   try {
-    const result = await catagoryServices.addCategory(req.body);
+    const imagePath = req.file ? `uploads/images/${req.file.filename}` : null;
+    const data = req.body;
+    const result = await catagoryServices.addCategory(data, imagePath);
     res.status(201).json(response.successRes(201, "Category added", result));
   } catch (err) {
     res.status(400).json(response.errorRes(400, err.message));

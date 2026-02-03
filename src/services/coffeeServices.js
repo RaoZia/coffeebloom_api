@@ -3,38 +3,46 @@ const TABLE_NAMES = require("../constants/tableNames");
 const { error, success } = require("../constants/messages");
 
 // ########################### Add Coffee ##############################
-const addCoffee = async (data) => {
+const addCoffee = async (data, imagePath) => {
   const { coffee_name, coffee_description, coffee_price, coffee_catagory_id } =
     data;
-  // const [catRecord] = await db.execute(
-  //   `SELECT coffee_catagory_id FROM ${TABLE_NAMES.COFFEE_CATAGORY} WHERE coffee_catagory_id=? `,
-  //   [coffee_catagory_id],
+
+  // ########################### Query to insert image in tbl_imgs ##############################
+  // const [storeImg] = await db.execute(
+  //   `INSERT INTO ${TABLE_NAMES.IMAGES} (image_url) VALUES (?)`,
+  //   [imagePath],
   // );
-  // const catId = catRecord[0];
-  // console.log("catagoryId is:", catRecord[0]);
+  // const ImgId = storeImg.insertId;
   const [result] = await db.execute(
     `INSERT INTO ${TABLE_NAMES.COFFEES}( coffee_name,coffee_description, coffee_price,coffee_catagory_id)
      VALUES ( ?, ?, ?,?)`,
     [coffee_name, coffee_description, coffee_price, coffee_catagory_id],
   );
-  const record = result.insertId;
+  const coffeeId = result.insertId;
+  await db.execute(
+    `INSERT INTO ${TABLE_NAMES.IMAGES} (foreign_type, foreign_id,image_url) VALUES (?,?,?)`,
+    [2, coffeeId, imagePath],
+  );
   const [rows] = await db.execute(
-    `SELECT c.coffee_id,c.coffee_name, c.coffee_description,c.coffee_price,c.rating,c.status,
+    `SELECT c.coffee_id,c.coffee_name, i.image_url, c.coffee_description,c.coffee_price,c.rating,c.status,
     c1.coffee_catagory_id,c1.coffee_catagory_name FROM ${TABLE_NAMES.COFFEES} c
     LEFT JOIN ${TABLE_NAMES.COFFEE_CATAGORY} c1
-    ON c1.coffee_catagory_id = c.coffee_catagory_id WHERE c.coffee_id = ? AND c.status = 1`,
-    [record],
+    ON c1.coffee_catagory_id = c.coffee_catagory_id
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_id = i.foreign_id
+     WHERE c.coffee_id = ? AND c.status = 1`,
+    [coffeeId],
   );
   return rows;
 };
 // ########################### Get all coffees ##############################
 const getAllCoffees = async () => {
   const [result] = await db.execute(
-    `SELECT c.coffee_id,c.coffee_name, c.coffee_description,c.coffee_price,c.rating,c.status,
+    `SELECT c.coffee_id,c.coffee_name,i.image_url, c.coffee_description,c.coffee_price,c.rating,c.status,
     c1.coffee_catagory_id,c1.coffee_catagory_name FROM ${TABLE_NAMES.COFFEES} c
     LEFT JOIN ${TABLE_NAMES.COFFEE_CATAGORY} c1
     ON c1.coffee_catagory_id = c.coffee_catagory_id 
-    AND c.status = 1`,
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_id = i.foreign_id
+    WHERE c.status = 1`,
   );
   return result;
 };
@@ -48,10 +56,11 @@ const getCoffeeById = async (id) => {
     throw new Error(error.RECORD_NOT_FOUND);
   }
   const [result] = await db.execute(
-    `SELECT c.coffee_id,c.coffee_name, c.coffee_description,c.coffee_price,c.rating,c.status,
+    `SELECT c.coffee_id,c.coffee_name,i.image_url, c.coffee_description,c.coffee_price,c.rating,c.status,
     c1.coffee_catagory_id,c1.coffee_catagory_name FROM ${TABLE_NAMES.COFFEES} c
     LEFT JOIN ${TABLE_NAMES.COFFEE_CATAGORY} c1
     ON c1.coffee_catagory_id = c.coffee_catagory_id 
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_id = i.foreign_id
     WHERE c.coffee_id = ?
     AND c.status = 1`,
     [id],

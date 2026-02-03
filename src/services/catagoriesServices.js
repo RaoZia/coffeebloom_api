@@ -2,29 +2,34 @@ const db = require("../config/db");
 const TABLE_NAMES = require("../constants/tableNames");
 const { error, success } = require("../constants/messages");
 // ########################### Add catagories ##############################
-const addCategory = async (data) => {
+const addCategory = async (data, imagePath) => {
   const { coffee_catagory_name } = data;
-
   const [result] = await db.execute(
     `INSERT INTO ${TABLE_NAMES.COFFEE_CATAGORY}
      (coffee_catagory_name)
      VALUES (?)`,
     [coffee_catagory_name],
   );
-  // const catId = result.insertId;
-  // await db.execute(
-  //   `INSERT INTO ${TABLE_NAMES.COFFEES}
-  //    (coffee_catagory_id)
-  //    VALUES (?)`,
-  //   [catId],
-  // );
-  return { id: result.insertId, coffee_catagory_name };
+  const catId = result.insertId;
+  await db.execute(
+    `INSERT INTO ${TABLE_NAMES.IMAGES} (foreign_type, foreign_id,image_url) VALUES (?,?,?)`,
+    [3, catId, imagePath],
+  );
+
+  const [rows] = await db.execute(
+    `SELECT c.coffee_catagory_name, i.image_url FROM ${TABLE_NAMES.COFFEE_CATAGORY} c 
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id 
+    WHERE c.coffee_catagory_id = ? AND c.status = 1 `,
+    [catId],
+  );
+  return rows;
 };
 // ########################### Get All catagories ##############################
 const getAllCategories = async () => {
   const [rows] = await db.execute(
-    `SELECT * FROM ${TABLE_NAMES.COFFEE_CATAGORY}
-     WHERE status = 1`,
+    `SELECT c.*, i.image_url FROM ${TABLE_NAMES.COFFEE_CATAGORY} c 
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id 
+    WHERE c.status = 1 `,
   );
   return rows;
 };
@@ -38,7 +43,9 @@ const getCatById = async (id) => {
     throw new Error(error.RECORD_NOT_FOUND);
   }
   const [result] = await db.execute(
-    `SELECT * FROM ${TABLE_NAMES.COFFEE_CATAGORY} WHERE coffee_catagory_id =? AND status = 1`,
+    `SELECT c.*, i.image_url FROM ${TABLE_NAMES.COFFEE_CATAGORY} c 
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id 
+    WHERE c.coffee_catagory_id = ? AND c.status = 1 `,
     [id],
   );
   return result;

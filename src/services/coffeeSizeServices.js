@@ -21,4 +21,14 @@ const getAllSizes = async () => {
   return result;
 };
 
-module.exports = { addCoffeeSize, getAllSizes };
+// ########################### GET SIZE BY ID ##############################
+
+const getSizeByID = async (id) => {
+  const [result] = await db.execute(
+    `SELECT * FROM ${TABLE_NAMES.COFFEE_SIZES} WHERE coffee_size_id = ? AND status = 1`,
+    [id],
+  );
+  return result;
+};
+
+module.exports = { addCoffeeSize, getAllSizes, getSizeByID };

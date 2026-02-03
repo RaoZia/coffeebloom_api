@@ -5,6 +5,7 @@ const {
   signup,
   login,
   forgotPassword,
+  VerifyOtp,
   resetPass,
   refreshToken,
 } = require("../controllers/authController");
@@ -137,7 +138,6 @@ router.post(
   */
   refreshToken,
 );
-
 router.post(
   "/forgotPass",
   /*
@@ -184,6 +184,16 @@ router.post(
   forgotPassword,
 );
 router.post(
+  "/verify",
+  /*
+    #swagger.tags = ['Auth']
+    #swagger.summary = 'Verify Otp'
+    #swagger.description = 'Verify Otp'
+  */
+  VerifyOtp,
+);
+
+router.post(
   "/resetPass",
   /*
     #swagger.tags = ['Auth']
@@ -196,18 +206,19 @@ router.post(
         "application/json": {
           schema: {
             type: "object",
-            required: ["email", "otp", "password"],
+            required: ["email", "password", "confirm_password"],
             properties: {
               email: {
                 type: "string",
                 format: "email",
                 example: "user@test.com"
               },
-              otp: {
-                type: "string",
-                example: "123456"
-              },
               password: {
+                type: "string",
+                format: "password",
+                example: "12345"
+              },
+              confirm_password: {
                 type: "string",
                 format: "password",
                 example: "12345"

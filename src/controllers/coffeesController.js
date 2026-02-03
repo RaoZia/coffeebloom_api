@@ -5,12 +5,14 @@ const coffeeServices = require("../services/coffeeServices");
 // ########################### Add coffees ##############################
 const addCoffee = async (req, res) => {
   try {
-    const result = await coffeeServices.addCoffee(req.body);
+    const imagePath = req.file ? `uploads/images/${req.file.filename}` : null;
+    const data = req.body;
+    const result = await coffeeServices.addCoffee(data, imagePath);
     return res
       .status(200)
       .json(response.successRes(200, success.COFFEE_ADDED, result));
   } catch (err) {
-    res.status(401).json(response.errorRes(401, err));
+    res.status(401).json(response.errorRes(401, err.message));
   }
 };
 // ########################### Get all coffees ##############################
@@ -42,7 +44,7 @@ const updateCoffeeById = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
     const result = await coffeeServices.updateCoffeeById(id, data);
-    console.log("result is", result);
+    // console.log("result is", result);
     return res
       .status(200)
       .json(response.successRes(200, success.ALL_COFFEES, result));

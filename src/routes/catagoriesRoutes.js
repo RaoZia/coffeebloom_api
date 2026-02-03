@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../middlewares/upload");
 const {
   addCategory,
   getAllCategories,
@@ -9,9 +10,9 @@ const {
 } = require("../controllers/catagoriesController");
 const protected = require("../middlewares/authMiddleware");
 
-// router.post("/add", addCategory);
+// router.post("/add", upload.single("image"), addCategory);
 router.get(
-  "/all",
+  "/",
   protected,
   /*
     #swagger.tags = ['Coffee Categories']

@@ -11,6 +11,8 @@ const usersRoutes = require("./routes/usersRoutes");
 const coffeeRoutes = require("./routes/coffeeRoutes");
 const catagoriesRoutes = require("./routes/catagoriesRoutes");
 const sizeRoutes = require("./routes/coffeeSizeRoutes");
+const ordersRoutes = require("./routes/ordersRoutes");
+const coffeeoptionRoutes = require("./routes/coffeeoptionRoutes");
 const app = express();
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -28,6 +30,8 @@ app.use("/users", usersRoutes);
 app.use("/coffees", coffeeRoutes);
 app.use("/catagory", catagoriesRoutes);
 app.use("/sizes", sizeRoutes);
+app.use("/orders", ordersRoutes);
+app.use("/Options", coffeeoptionRoutes);
 app.use(
   "/api-docs",
   swaggerUi.serve,

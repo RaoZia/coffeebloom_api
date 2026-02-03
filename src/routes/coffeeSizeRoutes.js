@@ -4,12 +4,13 @@ const router = express.Router();
 const {
   addCoffeeSize,
   getAllSizes,
+  getSizeByID,
 } = require("../controllers/coffeeSizeController");
 const protected = require("../middlewares/authMiddleware");
 
 // router.post("/add", addCoffeeSize);
 router.get(
-  "/all",
+  "/",
   protected,
   /*
     #swagger.tags = ['Coffee Sizes']
@@ -22,5 +23,19 @@ router.get(
   */
 
   getAllSizes,
+);
+router.get(
+  "/:id",
+  protected,
+  /*
+    #swagger.tags = ['Coffee Sizes']
+    #swagger.summary = 'Get single coffee size'
+    #swagger.description = 'Fetch single active coffee size'
+
+    #swagger.responses[200] = {
+      description: 'Coffee size fetched successfully'
+    }
+  */
+  getSizeByID,
 );
 module.exports = router;

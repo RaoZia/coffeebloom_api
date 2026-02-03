@@ -33,11 +33,13 @@ const getAllUsers = async () => {
       u.id,
       u.email,
       ud.name,
-      ud.address
+      ud.address,
+      i.image_url
     FROM ${TABLE_NAMES.USERS} u
     LEFT JOIN ${TABLE_NAMES.USERS_DETAILS} ud 
       ON u.id = ud.user_id
-    WHERE u.status = 1
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON i.foreign_type = 1 AND i.foreign_id =u.id 
+    AND u.status = 1
     `,
   );
 
@@ -65,15 +67,15 @@ const updateById = async (id, { email, name, address }, imagePath) => {
   );
   // ########################### Query to insert image in tbl_imgs ##############################
   const [storeImg] = await db.execute(
-    `INSERT INTO ${TABLE_NAMES.IMAGES} (image_url) VALUES (?)`,
-    [imagePath],
+    `INSERT INTO ${TABLE_NAMES.IMAGES} (foreign_type, foreign_id,image_url) VALUES (?,?,?)`,
+    [1, id, imagePath],
   );
-  const ImgId = storeImg.insertId;
+  // const ImgId = storeImg.insertId;
   // ########################### Query to update tbl_users_details ##############################
-  await db.execute(
-    `UPDATE ${TABLE_NAMES.USERS_DETAILS} SET image_id = ? WHERE user_id = ?`,
-    [ImgId, id],
-  );
+  // await db.execute(
+  //   `UPDATE ${TABLE_NAMES.USERS_DETAILS} SET image_id = ? WHERE user_id = ?`,
+  //   [ImgId, id],
+  // );
   // ########################### Query to return updated record ##############################
   const [result] = await db.execute(
     `SELECT
@@ -85,7 +87,7 @@ const updateById = async (id, { email, name, address }, imagePath) => {
       FROM ${TABLE_NAMES.USERS} u
       LEFT JOIN ${TABLE_NAMES.USERS_DETAILS} ud
         ON u.id = ud.user_id
-      LEFT JOIN ${TABLE_NAMES.IMAGES} i ON ud.image_id = i.image_id
+      LEFT JOIN ${TABLE_NAMES.IMAGES} i ON i.foreign_id = u.id
       WHERE u.id = ? AND u.status = 1
       `,
     [id],

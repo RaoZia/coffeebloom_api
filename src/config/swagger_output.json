@@ -232,6 +232,40 @@
         }
       }
     },
+    "/auth/verify": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Verify Otp",
+        "description": "Verify Otp",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "otp": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/resetPass": {
       "post": {
         "tags": [
@@ -264,8 +298,8 @@
                 "type": "object",
                 "required": [
                   "email",
-                  "otp",
-                  "password"
+                  "password",
+                  "confirm_password"
                 ],
                 "properties": {
                   "email": {
@@ -273,11 +307,12 @@
                     "format": "email",
                     "example": "user@test.com"
                   },
-                  "otp": {
-                    "type": "string",
-                    "example": "123456"
-                  },
                   "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "12345"
+                  },
+                  "confirm_password": {
                     "type": "string",
                     "format": "password",
                     "example": "12345"
@@ -392,8 +427,8 @@
         "tags": [
           "users"
         ],
-        "summary": "Get sigle user",
-        "description": "Fetch single user",
+        "summary": "Update user",
+        "description": "Update user profile with image",
         "parameters": [
           {
             "name": "id",
@@ -413,12 +448,32 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "rescode": 1,
+                  "message": "User updated",
+                  "data": {
+                    "id": 1,
+                    "name": "Ali Khan",
+                    "email": "user@test.com",
+                    "address": "Lahore",
+                    "image_url": "/uploads/images/profile.jpg"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
           }
         },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -428,8 +483,6 @@
                 "required": [
                   "name",
                   "email",
-                  "password",
-                  "confirm_password",
                   "address"
                 ],
                 "properties": {
@@ -439,13 +492,7 @@
                   },
                   "email": {
                     "type": "string",
-                    "format": "email",
                     "example": "user@test.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "format": "password",
-                    "example": "123456"
                   },
                   "address": {
                     "type": "string",
@@ -462,7 +509,7 @@
         }
       }
     },
-    "/coffees/all": {
+    "/coffees/": {
       "get": {
         "tags": [
           "Coffees"
@@ -522,7 +569,7 @@
         }
       }
     },
-    "/catagory/all": {
+    "/catagory/": {
       "get": {
         "tags": [
           "Coffee Categories"
@@ -585,7 +632,7 @@
         }
       }
     },
-    "/sizes/all": {
+    "/sizes/": {
       "get": {
         "tags": [
           "Coffee Sizes"
@@ -604,6 +651,106 @@
         "responses": {
           "200": {
             "description": "Coffee sizes fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/sizes/{id}": {
+      "get": {
+        "tags": [
+          "Coffee Sizes"
+        ],
+        "summary": "Get single coffee size",
+        "description": "Fetch single active coffee size",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Coffee size fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/Options/": {
+      "get": {
+        "tags": [
+          "Coffee Milk Options"
+        ],
+        "summary": "Get all Milk Options",
+        "description": "Fetch all active coffee milk options",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Coffee milk options fetched successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/Options/{id}": {
+      "get": {
+        "tags": [
+          "Coffee Milk Options"
+        ],
+        "summary": "Get single milk option",
+        "description": "Fetch single active coffee milk option",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Coffee milk option fetched successfully"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"

@@ -7,9 +7,9 @@ const TABLE_NAMES = {
   PASSWORD_RESETS: "tbl_password_resets",
   COFFEES: "tbl_coffees",
   COFFEE_CATAGORY: "tbl_coffee_catagory",
-  COFFEE_FLAVOR: "tbl_coffee_flavors",
   COFFEE_SIZES: "tbl_coffee_sizes",
   COFFEE_MILK_OPTIONS: "tbl_coffee_milk_option",
+  ORDERS: "tbl_orders",
 };
 
 module.exports = TABLE_NAMES;

@@ -46,11 +46,23 @@ const forgotPassword = async (req, res) => {
     res.status(401).json(response.errorRes(401, err));
   }
 };
+
+const VerifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const result = await authService.VerifyOtp({ email, otp });
+    // console.log("otppp,,", result);
+    return res.status(200).json(response.successRes(200, success.OTP_VERIFIED));
+  } catch (err) {
+    return res.status(400).json(response.errorRes(400, err.message));
+  }
+};
 // ########################### Reset Password ##############################
 const resetPass = async (req, res) => {
   try {
-    const { email, otp, password } = req.body;
-    const user = await authService.resetPass(email, otp, password);
+    const { email, password, confirm_password } = req.body;
+    const user = await authService.resetPass(email, password, confirm_password);
     res.status(200).json(response.successRes(200, success.PASSWORD_CHANGE));
   } catch (err) {
     res.status(400).json(response.errorRes(400, err.message));
@@ -82,6 +94,7 @@ module.exports = {
   signup,
   login,
   forgotPassword,
+  VerifyOtp,
   resetPass,
   refreshToken,
 };

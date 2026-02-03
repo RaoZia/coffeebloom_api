@@ -76,8 +76,8 @@ const login = async ({ email, password }) => {
 
   // ########################### Assign token on login ##############################
 
-  const accessToken = jwtutils.generateAccessToken(user.id);
-  const refreshToken = jwtutils.generateRefreshToken(user.id);
+  const accessToken = jwtutils.generateAccessToken(rows.id);
+  const refreshToken = jwtutils.generateRefreshToken(rows.id);
   return {
     message: success.USER_LOGIN,
     accessToken,
@@ -97,16 +97,13 @@ const forgotPassword = async ({ email }) => {
 };
 // ########################### Handle Password ##############################
 const handleOtp = async ({ email, otp }) => {
-  // const expiresAt = new Date(Date.now() + 1 * 60 * 1000);
-  // const expiresAt = new Date();
-  // expiresAt.setMinutes(expiresAt.getMinutes() + 1);
   const [exist] = await db.execute(
     `SELECT * FROM ${TABLE_NAMES.PASSWORD_RESETS} WHERE email = ? AND status = 1`,
     [email],
   );
   if (exist.length > 0) {
     await db.execute(
-      `UPDATE ${TABLE_NAMES.PASSWORD_RESETS} SET otp = ?, expires_at= DATE_ADD(NOW(), INTERVAL 1 MINUTE) WHERE email = ? AND status=1`,
+      `UPDATE ${TABLE_NAMES.PASSWORD_RESETS} SET otp = ?,is_verified = 0, expires_at= DATE_ADD(NOW(), INTERVAL 1 MINUTE) WHERE email = ? AND status=1`,
       [otp, email],
     );
   } else {
@@ -116,9 +113,9 @@ const handleOtp = async ({ email, otp }) => {
     );
   }
 };
-// ########################### Reset Password ##############################
-const resetPass = async (email, otp, password) => {
-  console.log("email is ", email, otp, password);
+// ########################### Verify Otp ##############################
+
+const VerifyOtp = async ({ email, otp }) => {
   const [result] = await db.execute(
     `SELECT email 
      FROM ${TABLE_NAMES.PASSWORD_RESETS} 
@@ -131,6 +128,30 @@ const resetPass = async (email, otp, password) => {
   if (result.length === 0) {
     throw new Error(error.INVALID_OTP);
   }
+
+  const [result1] = await db.execute(
+    `UPDATE ${TABLE_NAMES.PASSWORD_RESETS} SET otp = ?,is_verified = 1, expires_at= DATE_ADD(NOW(), INTERVAL 1 MINUTE) WHERE email = ? AND status=1`,
+    [otp, email],
+  );
+  return result1;
+};
+// ########################### Reset Password ##############################
+const resetPass = async (email, password, confirm_password) => {
+  const [result] = await db.execute(
+    `SELECT email
+     FROM ${TABLE_NAMES.PASSWORD_RESETS}
+     WHERE email = ?
+       AND is_verified = 1
+       AND status = 1
+       AND expires_at > NOW()`,
+    [email],
+  );
+  if (result.length === 0) {
+    throw new Error(error.INVALID_OTP);
+  }
+  if (password !== confirm_password) {
+    throw new Error(error.PASSWORD_MISMATCH);
+  }
   const hashedPassword = await bcrypt.hash(password, 10);
   await db.execute(
     `UPDATE ${TABLE_NAMES.USERS} SET password_hash = ? WHERE email = ? AND status =1`,
@@ -141,6 +162,7 @@ module.exports = {
   signup,
   login,
   forgotPassword,
+  VerifyOtp,
   handleOtp,
   resetPass,
 };
