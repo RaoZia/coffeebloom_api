@@ -43,7 +43,7 @@ const forgotPassword = async (req, res) => {
     await sendEmail(email, "Reset Password", message);
     res.status(200).json(response.successRes(200, success.EMAIL_SENT));
   } catch (err) {
-    res.status(401).json(response.errorRes(401, err));
+    res.status(401).json(response.errorRes(401, err.message));
   }
 };
 

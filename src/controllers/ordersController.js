@@ -4,7 +4,6 @@ const ordersServices = require("../services/ordersServices");
 
 const createOrder = async (req, res) => {
   try {
-    // console.log("user req:", req.user.id);
     const { total_amount } = req.body;
     const userId = req.user.id;
     const result = await ordersServices.createOrder(userId, total_amount);

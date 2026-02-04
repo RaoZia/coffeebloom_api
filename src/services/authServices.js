@@ -87,7 +87,7 @@ const login = async ({ email, password }) => {
 // ########################### Forgot Password ##############################
 const forgotPassword = async ({ email }) => {
   const [result] = await db.execute(
-    `SELECT * FROM ${TABLE_NAMES.USERS} WHERE email = ? AND status = 1`,
+    `SELECT email FROM ${TABLE_NAMES.USERS} WHERE email = ? AND status = 1`,
     [email],
   );
   if (result.length === 0) {

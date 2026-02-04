@@ -15,10 +15,12 @@ const getSingleuser = async (id) => {
       u.id,
       u.email,
       ud.name,
-      ud.address
+      ud.address,
+      i.image_url
     FROM ${TABLE_NAMES.USERS} u
     LEFT JOIN ${TABLE_NAMES.USERS_DETAILS} ud 
       ON u.id = ud.user_id
+      LEFT JOIN ${TABLE_NAMES.IMAGES} i ON u.id = i.foreign_id AND i.foreign_type = 1
     WHERE u.id = ? AND u.status = 1
     `,
     [id],

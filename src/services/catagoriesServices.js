@@ -28,7 +28,7 @@ const addCategory = async (data, imagePath) => {
 const getAllCategories = async () => {
   const [rows] = await db.execute(
     `SELECT c.*, i.image_url FROM ${TABLE_NAMES.COFFEE_CATAGORY} c 
-    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id 
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id AND foreign_type = 2
     WHERE c.status = 1 `,
   );
   return rows;
@@ -44,7 +44,7 @@ const getCatById = async (id) => {
   }
   const [result] = await db.execute(
     `SELECT c.*, i.image_url FROM ${TABLE_NAMES.COFFEE_CATAGORY} c 
-    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id 
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id AND foreign_type = 2 
     WHERE c.coffee_catagory_id = ? AND c.status = 1 `,
     [id],
   );

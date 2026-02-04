@@ -29,7 +29,7 @@ const addCoffee = async (data, imagePath) => {
     LEFT JOIN ${TABLE_NAMES.COFFEE_CATAGORY} c1
     ON c1.coffee_catagory_id = c.coffee_catagory_id
     LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_id = i.foreign_id
-     WHERE c.coffee_id = ? AND c.status = 1`,
+    WHERE c.coffee_id = ? AND c.status = 1`,
     [coffeeId],
   );
   return rows;
@@ -41,7 +41,7 @@ const getAllCoffees = async () => {
     c1.coffee_catagory_id,c1.coffee_catagory_name FROM ${TABLE_NAMES.COFFEES} c
     LEFT JOIN ${TABLE_NAMES.COFFEE_CATAGORY} c1
     ON c1.coffee_catagory_id = c.coffee_catagory_id 
-    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_id = i.foreign_id
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_id = i.foreign_id AND i.foreign_type = 2
     WHERE c.status = 1`,
   );
   return result;
@@ -60,9 +60,32 @@ const getCoffeeById = async (id) => {
     c1.coffee_catagory_id,c1.coffee_catagory_name FROM ${TABLE_NAMES.COFFEES} c
     LEFT JOIN ${TABLE_NAMES.COFFEE_CATAGORY} c1
     ON c1.coffee_catagory_id = c.coffee_catagory_id 
-    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_id = i.foreign_id
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_id = i.foreign_id AND i.foreign_type = 2
     WHERE c.coffee_id = ?
     AND c.status = 1`,
+    [id],
+  );
+  return result;
+};
+
+const getCoffeeByCatId = async (id) => {
+  const [existingUser] = await db.execute(
+    `SELECT coffee_catagory_id FROM ${TABLE_NAMES.COFFEE_CATAGORY} WHERE coffee_catagory_id = ? AND status = 1`,
+    [id],
+  );
+  if (existingUser.length === 0) {
+    throw new Error(error.RECORD_NOT_FOUND);
+  }
+
+  const [result] = await db.execute(
+    `SELECT c.coffee_id,c.coffee_name,c.coffee_description,c.coffee_price,c.rating,c.status, 
+    ct.coffee_catagory_id, ct.coffee_catagory_name,i.image_url 
+    FROM ${TABLE_NAMES.COFFEES} c 
+    LEFT JOIN ${TABLE_NAMES.COFFEE_CATAGORY} ct 
+    ON ct.coffee_catagory_id = c.coffee_catagory_id
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i 
+    ON i.foreign_id = c.coffee_id AND i.foreign_type = 2
+     WHERE ct.coffee_catagory_id = ? AND c.status = 1`,
     [id],
   );
   return result;
@@ -107,6 +130,7 @@ module.exports = {
   addCoffee,
   getAllCoffees,
   getCoffeeById,
+  getCoffeeByCatId,
   updateCoffeeById,
   DeleteCoffeeById,
 };
