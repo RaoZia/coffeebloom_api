@@ -33,7 +33,7 @@ const getCoffeeById = async (req, res) => {
     const result = await coffeeServices.getCoffeeById(id);
     return res
       .status(200)
-      .json(response.successRes(200, success.ALL_COFFEES, result));
+      .json(response.successRes(200, success.SINGLE_COFFEE, result));
   } catch (err) {
     res.status(401).json(response.errorRes(401, err.message));
   }
@@ -45,7 +45,7 @@ const getCoffeeByCatId = async (req, res) => {
     const result = await coffeeServices.getCoffeeByCatId(id);
     return res
       .status(200)
-      .json(response.successRes(200, success.ALL_COFFEES, result));
+      .json(response.successRes(200, success.COFFEE_BY_CAT_ID, result));
   } catch (err) {
     return res.status(400).json(response.errorRes(400, err.message));
   }
@@ -56,7 +56,6 @@ const updateCoffeeById = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
     const result = await coffeeServices.updateCoffeeById(id, data);
-    // console.log("result is", result);
     return res
       .status(200)
       .json(response.successRes(200, success.ALL_COFFEES, result));

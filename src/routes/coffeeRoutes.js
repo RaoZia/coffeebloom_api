@@ -45,16 +45,16 @@ router.get(
     */
   getCoffeeById,
 );
-// router.get(
-//   "/catagory/:id",
-//   protected,
-//   /*
-//     #swagger.tags = ['Coffees']
-//     #swagger.summary = 'Get coffee By ID'
-//     #swagger.description = 'Get coffee details'
-//     */
-//   getCoffeeByCatId,
-// );
+router.get(
+  "/catagory/:id",
+  protected,
+  /*
+    #swagger.tags = ['Coffees']
+    #swagger.summary = 'Get coffee By ID'
+    #swagger.description = 'Get coffee details'
+    */
+  getCoffeeByCatId,
+);
 // router.put("/:id", updateCoffeeById);
 // router.delete("/:id", DeleteCoffeeById);
 

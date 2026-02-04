@@ -1,5 +1,7 @@
 // ######################### All Success and Error messages will be shown from this file ###############################
 
+const { COFFEE_CATAGORY } = require("./tableNames");
+
 const success = {
   USER_REGISTER: "User Register Successfully",
   USER_LOGIN: "User Login Successfully",
@@ -10,10 +12,17 @@ const success = {
   PASSWORD_CHANGE: "Password updated",
   COFFEE_ADDED: "Coffee item added",
   ALL_COFFEES: "All Coffees fetched",
+  SINGLE_COFFEE: "Single Coffee",
+  COFFEE_BY_CAT_ID: "Coffee By Catagory ID",
   COFFEE_CAT_ADDED: "Coffee catagory added",
   ALL_COFFEE_CAT: "All Coffee catagoris",
   DELETE_COFFEE: "Record Deleted",
+  COFFEE_CATAGORY_ADDED: "Coffee Catagory Added",
+  ALL_CATAGORIES: "Catagories List",
+  SINGLE_CATAGORY: "Single Catagory",
   OTP_VERIFIED: "Otp verify successfully",
+  CREATE_ORDER: "Order Created",
+  ALL_ORDERS: "Orders List",
 };
 const error = {
   EMAIL_EXIST: "This Email is already registered",

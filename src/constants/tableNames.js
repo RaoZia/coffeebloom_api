@@ -10,6 +10,7 @@ const TABLE_NAMES = {
   COFFEE_SIZES: "tbl_coffee_sizes",
   COFFEE_MILK_OPTIONS: "tbl_coffee_milk_option",
   ORDERS: "tbl_orders",
+  ORDER_ITEM: "tbl_order_items",
 };
 
 module.exports = TABLE_NAMES;

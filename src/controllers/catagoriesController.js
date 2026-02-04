@@ -7,7 +7,9 @@ const addCategory = async (req, res) => {
     const imagePath = req.file ? `uploads/images/${req.file.filename}` : null;
     const data = req.body;
     const result = await catagoryServices.addCategory(data, imagePath);
-    res.status(201).json(response.successRes(201, "Category added", result));
+    res
+      .status(201)
+      .json(response.successRes(201, success.COFFEE_CATAGORY_ADDED, result));
   } catch (err) {
     res.status(400).json(response.errorRes(400, err.message));
   }
@@ -16,19 +18,21 @@ const addCategory = async (req, res) => {
 const getAllCategories = async (req, res) => {
   try {
     const data = await catagoryServices.getAllCategories();
-    res.status(200).json(response.successRes(200, "Categories fetched", data));
+    res
+      .status(200)
+      .json(response.successRes(200, success.ALL_CATAGORIES, data));
   } catch (err) {
     res.status(400).json(response.errorRes(400, err.message));
   }
 };
-
+// ########################### Get catagory By ID ##############################
 const getCatById = async (req, res) => {
   try {
     const id = req.params.id;
     const result = await catagoryServices.getCatById(id);
     return res
       .status(200)
-      .json(response.successRes(200, success.ALL_COFFEES, result));
+      .json(response.successRes(200, success.SINGLE_CATAGORY, result));
   } catch (err) {
     res.status(401).json(response.errorRes(401, err.message));
   }

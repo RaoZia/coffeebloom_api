@@ -67,7 +67,7 @@ const getCoffeeById = async (id) => {
   );
   return result;
 };
-
+// ########################### Get coffee By Catagory ID##############################
 const getCoffeeByCatId = async (id) => {
   const [existingUser] = await db.execute(
     `SELECT coffee_catagory_id FROM ${TABLE_NAMES.COFFEE_CATAGORY} WHERE coffee_catagory_id = ? AND status = 1`,
@@ -111,7 +111,7 @@ const updateCoffeeById = async (id, data) => {
   );
   return result;
 };
-// ########################### Get coffeeByID##############################
+// ########################### Delete coffeeByID##############################
 const DeleteCoffeeById = async (id) => {
   const [existingUser] = await db.execute(
     `SELECT coffee_id FROM ${TABLE_NAMES.COFFEES} WHERE coffee_id = ? AND status = 1`,

@@ -569,6 +569,43 @@
         }
       }
     },
+    "/coffees/catagory/{id}": {
+      "get": {
+        "tags": [
+          "Coffees"
+        ],
+        "summary": "Get coffee By ID",
+        "description": "Get coffee details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/catagory/": {
       "get": {
         "tags": [
