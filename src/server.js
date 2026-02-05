@@ -13,6 +13,7 @@ const catagoriesRoutes = require("./routes/catagoriesRoutes");
 const sizeRoutes = require("./routes/coffeeSizeRoutes");
 const ordersRoutes = require("./routes/ordersRoutes");
 const coffeeoptionRoutes = require("./routes/coffeeoptionRoutes");
+const favoriteRoutes = require("./routes/favoriteRoutes");
 const app = express();
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -32,6 +33,7 @@ app.use("/catagory", catagoriesRoutes);
 app.use("/sizes", sizeRoutes);
 app.use("/orders", ordersRoutes);
 app.use("/Options", coffeeoptionRoutes);
+app.use("/favorites", favoriteRoutes);
 app.use(
   "/api-docs",
   swaggerUi.serve,

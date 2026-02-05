@@ -11,6 +11,8 @@ const TABLE_NAMES = {
   COFFEE_MILK_OPTIONS: "tbl_coffee_milk_option",
   ORDERS: "tbl_orders",
   ORDER_ITEM: "tbl_order_items",
+  PAYMENTS: "tbl_payments",
+  FAVORITES: "tbl_favorites",
 };
 
 module.exports = TABLE_NAMES;
