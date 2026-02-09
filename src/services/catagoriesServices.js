@@ -3,12 +3,12 @@ const TABLE_NAMES = require("../constants/tableNames");
 const { error, success } = require("../constants/messages");
 // ########################### Add catagories ##############################
 const addCategory = async (data, imagePath) => {
-  const { coffee_catagory_name } = data;
+  const { coffee_catagory_name, description } = data;
   const [result] = await db.execute(
     `INSERT INTO ${TABLE_NAMES.COFFEE_CATAGORY}
-     (coffee_catagory_name)
-     VALUES (?)`,
-    [coffee_catagory_name],
+     (coffee_catagory_name,description)
+     VALUES (?,?)`,
+    [coffee_catagory_name, description],
   );
   const catId = result.insertId;
   await db.execute(
@@ -27,8 +27,8 @@ const addCategory = async (data, imagePath) => {
 // ########################### Get All catagories ##############################
 const getAllCategories = async () => {
   const [rows] = await db.execute(
-    `SELECT c.*, i.image_url FROM ${TABLE_NAMES.COFFEE_CATAGORY} c 
-    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id AND foreign_type = 2
+    `SELECT c.coffee_catagory_name,c.description, i.image_url FROM ${TABLE_NAMES.COFFEE_CATAGORY} c 
+    LEFT JOIN ${TABLE_NAMES.IMAGES} i ON c.coffee_catagory_id = i.foreign_id AND foreign_type = 3
     WHERE c.status = 1 `,
   );
   return rows;

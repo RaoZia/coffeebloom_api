@@ -4,12 +4,15 @@ const ordersServices = require("../services/ordersServices");
 // ########################### Create New ORDER ##############################
 const createOrder = async (req, res) => {
   try {
-    const { total_amount, items } = req.body;
+    const { total_amount, items, delivery_address, lat, lng } = req.body;
     const userId = req.user.id;
     const result = await ordersServices.createOrder(
       userId,
       total_amount,
       items,
+      delivery_address,
+      lat,
+      lng,
     );
     return res
       .status(200)

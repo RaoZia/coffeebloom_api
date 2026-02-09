@@ -13,6 +13,8 @@ const TABLE_NAMES = {
   ORDER_ITEM: "tbl_order_items",
   PAYMENTS: "tbl_payments",
   FAVORITES: "tbl_favorites",
+  DELIVERIES: "tbl_deliveries",
+  DELIVERY_LOCATION: "tbl_delivery_locations",
 };
 
 module.exports = TABLE_NAMES;

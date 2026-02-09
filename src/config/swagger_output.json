@@ -767,6 +767,15 @@
                   },
                   "items": {
                     "example": "any"
+                  },
+                  "delivery_address": {
+                    "example": "any"
+                  },
+                  "lat": {
+                    "example": "any"
+                  },
+                  "lng": {
+                    "example": "any"
                   }
                 }
               }

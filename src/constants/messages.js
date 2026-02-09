@@ -45,6 +45,7 @@ const error = {
   INVALID_USER_ID: "Invalid user ID",
   INVALID_OTP: "Invalid Otp",
   ALREADY_IN_FAVORITES: "Coffee Already In Favorites",
+  ALL_FIELDS: "All fields are required",
 };
 
 module.exports = { success, error };
