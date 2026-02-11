@@ -4,14 +4,16 @@ const locationServices = require("../services/locationServices");
 
 const addLocation = async (req, res) => {
   try {
-    const { order_id, current_lat, current_lng } = req.body;
+    const { delivery_id, current_lat, current_lng } = req.body;
 
     const result = await locationServices.addLocation(
-      order_id,
+      delivery_id,
       current_lat,
       current_lng,
     );
-    return res.status(200).json(response.successRes(200, success.CREATE_ORDER));
+    return res
+      .status(200)
+      .json(response.successRes(200, success.LOCATION_ADDED));
   } catch (err) {
     return res.status(400).json(response.errorRes(400, err.message));
   }
@@ -19,11 +21,11 @@ const addLocation = async (req, res) => {
 
 const getLocation = async (req, res) => {
   try {
-    const { orderId } = req.params;
-    const result = await locationServices.getLocation(orderId);
+    const { deliveryId } = req.params;
+    const result = await locationServices.getLocation(deliveryId);
     return res
       .status(200)
-      .json(response.successRes(200, success.ALL_ORDERS, result));
+      .json(response.successRes(200, success.LATEST_LOCATION, result));
   } catch (err) {
     return res.status(400).json(response.errorRes(400, err.message));
   }

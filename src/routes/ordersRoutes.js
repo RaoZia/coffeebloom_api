@@ -5,6 +5,7 @@ const {
   createOrder,
   getAllOrders,
   orderPayment,
+  webHook,
 } = require("../controllers/ordersController");
 const protected = require("../middlewares/authMiddleware");
 router.post(
@@ -37,4 +38,6 @@ router.post(
   */
   orderPayment,
 );
+
+// router.post("/webhook", express.raw({ type: "application/json" }), webHook);
 module.exports = router;

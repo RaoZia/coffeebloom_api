@@ -27,6 +27,8 @@ const success = {
   FAVORITE_ADDED: "Added Into Favorites",
   FAVORITES_LIST: "Favorites List",
   FAVORITES_REMOVE: "Remove From Favorites",
+  LOCATION_ADDED: "Location Added",
+  LATEST_LOCATION: "Latest Location",
 };
 const error = {
   EMAIL_EXIST: "This Email is already registered",

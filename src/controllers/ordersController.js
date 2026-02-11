@@ -1,6 +1,10 @@
 const { success, error } = require("../constants/messages");
 const response = require("../constants/responses");
 const ordersServices = require("../services/ordersServices");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const endpointSecret =
+  "whsec_0123a64d54c0603d14061a494e4cef192d22864e16255909c768f171ed859beb";
+
 // ########################### Create New ORDER ##############################
 const createOrder = async (req, res) => {
   try {
@@ -19,7 +23,7 @@ const createOrder = async (req, res) => {
       .json(response.successRes(200, success.CREATE_ORDER, result));
   } catch (err) {
     console.log(err);
-    return res.status(400).json(400, error.message);
+    return res.status(400).json(400, err.message);
   }
 };
 
@@ -42,10 +46,41 @@ const orderPayment = async (req, res) => {
 
     return res
       .status(200)
-      .json(response.successRes(200, success.PAYMENT_COMPLETE));
+      .json(response.successRes(200, success.PAYMENT_COMPLETE, result));
   } catch (err) {
-    return res.status(400).json(response.errorRes(400, error.message));
+    return res.status(400).json(response.errorRes(400, err.message));
   }
 };
 
-module.exports = { createOrder, getAllOrders, orderPayment };
+const webHook = async (req, res) => {
+  let event = req.body;
+  if (endpointSecret) {
+    const signature = req.headers["stripe-signature"];
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        signature,
+        endpointSecret,
+      );
+    } catch (err) {
+      console.log(`⚠️  Webhook signature verification failed.`, err.message);
+      return res.status(400);
+    }
+  }
+
+  switch (event.type) {
+    case "payment_intent.succeeded":
+      const paymentIntent = event.data.object;
+      console.log(`PaymentIntent for ${paymentIntent.amount} was successful!`);
+      break;
+    case "payment_method.attached":
+      const paymentMethod = event.data.object;
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}.`);
+  }
+
+  res.send();
+};
+
+module.exports = { createOrder, getAllOrders, orderPayment, webHook };
