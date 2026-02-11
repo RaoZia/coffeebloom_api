@@ -2,7 +2,7 @@ const { success, error } = require("../constants/messages");
 const response = require("../constants/responses");
 const ordersServices = require("../services/ordersServices");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const endpointSecret = process.env.ENDPOINT_SECRET;
+// const endpointSecret = process.env.ENDPOINT_SECRET;
 
 // ########################### Create New ORDER ##############################
 const createOrder = async (req, res) => {
