@@ -1,7 +1,7 @@
 const { success, error } = require("../constants/messages");
 const response = require("../constants/responses");
 const ordersServices = require("../services/ordersServices");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+// const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // const endpointSecret = process.env.ENDPOINT_SECRET;
 
 // ########################### Create New ORDER ##############################
@@ -62,7 +62,7 @@ const orderPayment = async (req, res) => {
 //         endpointSecret,
 //       );
 //     } catch (err) {
-//       console.log(`⚠️  Webhook signature verification failed.`, err.message);
+//       console.log(` Webhook signature verification failed.`, err.message);
 //       return res.status(400);
 //     }
 //   }
