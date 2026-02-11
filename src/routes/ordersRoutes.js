@@ -5,7 +5,6 @@ const {
   createOrder,
   getAllOrders,
   orderPayment,
-  webHook,
 } = require("../controllers/ordersController");
 const protected = require("../middlewares/authMiddleware");
 router.post(
