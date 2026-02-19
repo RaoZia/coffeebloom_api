@@ -40,11 +40,23 @@ const createOrder = async (userId, total_amount, items) => {
 };
 // ########################### Get ALL ORDERS ##############################
 const getAllOrders = async (id) => {
+  // const [result] = await db.execute(
+  //   `SELECT o.user_id,o.total_amount,i.coffee_id,i.size_id,i.milk_id,i.quantity,i.price FROM ${TABLE_NAMES.ORDERS} o
+  //   LEFT JOIN ${TABLE_NAMES.ORDER_ITEM} i
+  //   ON o.order_id = i.order_id
+  //    WHERE o.user_id =?  AND o.status = 0 `,
+  //   [id],
+  // );
   const [result] = await db.execute(
-    `SELECT o.user_id,o.total_amount,i.coffee_id,i.size_id,i.milk_id,i.quantity,i.price FROM ${TABLE_NAMES.ORDERS} o
-    LEFT JOIN ${TABLE_NAMES.ORDER_ITEM} i 
+    `SELECT o.user_id,o.total_amount,i.coffee_id,c.coffee_name,i.size_id,i.milk_id,i.quantity,i.price,im.image_url FROM ${TABLE_NAMES.ORDERS} o
+    LEFT JOIN ${TABLE_NAMES.ORDER_ITEM} i
     ON o.order_id = i.order_id
-     WHERE o.user_id =? AND o.status =0 `,
+    LEFT JOIN ${TABLE_NAMES.COFFEES} c 
+    ON c.coffee_id = i.coffee_id
+    LEFT JOIN ${TABLE_NAMES.IMAGES} im
+    ON  im.foreign_id = i.coffee_id
+    AND im.foreign_type = 2
+     WHERE o.user_id =?  AND o.status = 0 `,
     [id],
   );
   return result;
