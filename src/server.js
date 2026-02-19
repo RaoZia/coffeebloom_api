@@ -19,7 +19,7 @@ const notificationRoutes = require("./routes/notificationRoutes");
 const webhookRoutes = require("./routes/webhookRoutes");
 const app = express();
 
-app.use("/webhook", webhookRoutes);
+// app.use("/webhook", webhookRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(
   cors({
