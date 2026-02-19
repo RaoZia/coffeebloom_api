@@ -5,6 +5,8 @@ const {
   createOrder,
   getAllOrders,
   orderPayment,
+  pickupAddress,
+  deliverAddress,
 } = require("../controllers/ordersController");
 const protected = require("../middlewares/authMiddleware");
 router.post(
@@ -37,6 +39,6 @@ router.post(
   */
   orderPayment,
 );
-
-// router.post("/webhook", express.raw({ type: "application/json" }), webHook);
+router.post("/pickup", protected, pickupAddress);
+router.post("/address", protected, deliverAddress);
 module.exports = router;

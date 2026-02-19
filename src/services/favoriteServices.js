@@ -16,7 +16,6 @@ const addFavorite = async (userid, coffee_id) => {
   //     [coffee_id],
   //   );
   //   const coffeeImg = coffees[0].image_url;
-  await db.execute(`INSERT INTO `);
   const [result1] = await db.execute(
     `INSERT INTO ${TABLE_NAMES.FAVORITES} (user_id, coffee_id) VALUES (?,?)`,
     [userid, coffee_id],

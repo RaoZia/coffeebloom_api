@@ -3,14 +3,7 @@ const TABLE_NAMES = require("../constants/tableNames");
 const { error, success } = require("../constants/messages");
 
 // ########################### Create New ORDER ##############################
-const createOrder = async (
-  userId,
-  total_amount,
-  items,
-  delivery_address,
-  lat,
-  lng,
-) => {
+const createOrder = async (userId, total_amount, items) => {
   const [result] = await db.execute(
     `INSERT INTO ${TABLE_NAMES.ORDERS} (user_id, total_amount) values (?,?)`,
     [userId, total_amount],
@@ -43,16 +36,14 @@ const createOrder = async (
       ],
     );
   }
-
-  await db.execute(
-    `INSERT INTO ${TABLE_NAMES.DELIVERIES} (order_id, delivery_address,delivery_lat, delivery_lng) VALUES (?,?,?,?)`,
-    [orderId, delivery_address, lat, lng],
-  );
 };
 // ########################### Get ALL ORDERS ##############################
 const getAllOrders = async (id) => {
   const [result] = await db.execute(
-    `SELECT * FROM ${TABLE_NAMES.ORDERS} WHERE user_id =? AND status = 0`,
+    `SELECT o.user_id,o.total_amount,i.coffee_id,i.size_id,i.milk_id,i.quantity,i.price FROM ${TABLE_NAMES.ORDERS} o
+    LEFT JOIN ${TABLE_NAMES.ORDER_ITEM} i 
+    ON o.order_id = i.order_id
+     WHERE o.user_id =? AND o.status =0 `,
     [id],
   );
   return result;
@@ -75,8 +66,7 @@ const orderPayment = async (order_id, payment_method) => {
       order_id: order_id,
     },
   });
-  // console.log("paymentIntent id is", paymentIntent.id);
-  // console.log("client key:", paymentIntent.client_secret);
+
   await db.execute(
     `UPDATE ${TABLE_NAMES.ORDERS} SET status = 1 WHERE order_id = ?`,
     [order_id],
@@ -92,5 +82,25 @@ const orderPayment = async (order_id, payment_method) => {
     client_secret: paymentIntent.client_secret,
   };
 };
+// ########################### Add Pickup Address ##############################
+const pickupAddress = async (orderId, pick_up_address, lat, lng) => {
+  const [result] = await db.execute(
+    `INSERT INTO ${TABLE_NAMES.PICKUP_ADDRESS} (order_id, pickup_address, pickup_lat,  pickup_lng) VALUES (?,?,?,?)`,
+    [orderId, pick_up_address, lat, lng],
+  );
+};
+// ########################### Add Delivery Address ##############################
+const deliverAddress = async (orderId, delivery_address, lat, lng) => {
+  const [result] = await db.execute(
+    `INSERT INTO ${TABLE_NAMES.DELIVERIES} (order_id, delivery_address,delivery_lat, delivery_lng) VALUES (?,?,?,?)`,
+    [orderId, delivery_address, lat, lng],
+  );
+};
 
-module.exports = { createOrder, getAllOrders, orderPayment };
+module.exports = {
+  createOrder,
+  getAllOrders,
+  orderPayment,
+  pickupAddress,
+  deliverAddress,
+};

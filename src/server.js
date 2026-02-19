@@ -15,10 +15,12 @@ const ordersRoutes = require("./routes/ordersRoutes");
 const coffeeoptionRoutes = require("./routes/coffeeoptionRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const locationRoutes = require("./routes/locationRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
+const webhookRoutes = require("./routes/webhookRoutes");
 const app = express();
 
+app.use("/webhook", webhookRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
 app.use(
   cors({
     origin: "*",
@@ -36,6 +38,7 @@ app.use("/orders", ordersRoutes);
 app.use("/Options", coffeeoptionRoutes);
 app.use("/favorites", favoriteRoutes);
 app.use("/locations", locationRoutes);
+app.use("/notifications", notificationRoutes);
 app.use(
   "/api-docs",
   swaggerUi.serve,

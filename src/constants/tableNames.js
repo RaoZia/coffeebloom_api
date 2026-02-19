@@ -14,7 +14,9 @@ const TABLE_NAMES = {
   PAYMENTS: "tbl_payments",
   FAVORITES: "tbl_favorites",
   DELIVERIES: "tbl_deliveries",
+  PICKUP_ADDRESS: "tbl_pickups",
   DELIVERY_LOCATION: "tbl_delivery_locations",
+  NOTIFICATIONS: "tbl_notifications",
 };
 
 module.exports = TABLE_NAMES;

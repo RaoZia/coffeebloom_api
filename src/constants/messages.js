@@ -1,6 +1,6 @@
 // ######################### All Success and Error messages will be shown from this file ###############################
 
-const { COFFEE_CATAGORY, FAVORITES } = require("./tableNames");
+const { COFFEE_CATAGORY, FAVORITES, PICKUP_ADDRESS } = require("./tableNames");
 
 const success = {
   USER_REGISTER: "User Register Successfully",
@@ -29,6 +29,10 @@ const success = {
   FAVORITES_REMOVE: "Remove From Favorites",
   LOCATION_ADDED: "Location Added",
   LATEST_LOCATION: "Latest Location",
+  DELIVERY_ADDRESS_ADDED: "Delivery address added",
+  PICKUP_ADDRESS_ADDED: "Pickup address added",
+  NOTIFICATION_SEND: "Notification sent successfully",
+  FETCH_NOTIFICATION: "Notification fetched",
 };
 const error = {
   EMAIL_EXIST: "This Email is already registered",
@@ -48,6 +52,7 @@ const error = {
   INVALID_OTP: "Invalid Otp",
   ALREADY_IN_FAVORITES: "Coffee Already In Favorites",
   ALL_FIELDS: "All fields are required",
+  LOCATION_PRESENT: "This location is already available",
 };
 
 module.exports = { success, error };
