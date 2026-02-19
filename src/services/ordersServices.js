@@ -1,6 +1,7 @@
 const db = require("../config/db");
 const TABLE_NAMES = require("../constants/tableNames");
 const { error, success } = require("../constants/messages");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // ########################### Create New ORDER ##############################
 const createOrder = async (userId, total_amount, items) => {
@@ -58,7 +59,6 @@ const orderPayment = async (order_id, payment_method) => {
     throw new Error(error.RECORD_NOT_FOUND);
   }
   const total_amount = amount[0].total_amount;
-  const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Math.round(total_amount * 100),
     currency: "usd",
